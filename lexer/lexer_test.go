@@ -24,6 +24,10 @@ if (5 < 10) {
 	return false;
 }
 
+while (true) {
+	return true;
+}
+
 10 == 10;
 10 != 9;
 "foobar"
@@ -99,6 +103,15 @@ if (5 < 10) {
 		{token.LBRACE, "{"},
 		{token.RETURN, "return"},
 		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+		{token.WHILE, "while"},
+		{token.LPAREN, "("},
+		{token.TRUE, "true"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.INT, "10"},
