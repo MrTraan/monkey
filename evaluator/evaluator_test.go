@@ -131,6 +131,26 @@ func TestWhileStatements(t *testing.T) {
 	}{
 		{"let a = 0; while (a < 4) {++a};a;", 4},
 		{"let a = 0; let b = 0; while (a < 4) {++a; b = b + 4}; b;", 16},
+		{`let a = 0;
+while (a < 10) {
+	++a;
+	if (a == 4) {
+		return 4;
+	}
+};
+a;`, 4},
+		{`let a = 0;
+			let b = 0;
+			let c = 0;
+while (a < 10) {
+	++a;
+	c = 0;
+	while (c < 10) {
+		++b;
+		++c;
+	}
+};
+b;`, 100},
 	}
 
 	for _, tt := range tests {

@@ -286,6 +286,12 @@ func evalWhileExpression(ie *ast.WhileExpression, env *object.Environment) objec
 
 	for ; isTruthy(condition); condition = Eval(ie.Condition, env) {
 		consequence = Eval(ie.Consequence, env)
+		if consequence != nil {
+			rt := consequence.Type()
+			if rt == object.RETURN_VALUE_OBJ || rt == object.ERROR_OBJ {
+				return consequence
+			}
+		}
 	}
 
 	if isError(condition) {
