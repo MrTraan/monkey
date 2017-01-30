@@ -124,6 +124,21 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
+func TestWhileStatements(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int64
+	}{
+		{"let a = 0; while (a < 4) {++a};a;", 4},
+		{"let a = 0; let b = 0; while (a < 4) {++a; b = b + 4}; b;", 16},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testIntegerObject(t, evaluated, tt.expected)
+	}
+}
+
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input    string

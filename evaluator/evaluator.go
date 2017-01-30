@@ -42,7 +42,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
-		env.Set(node.Name.Value, val)
+		return env.Set(node.Name.Value, val)
 
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
@@ -363,9 +363,9 @@ func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Enviro
 
 	for paramIdx, param := range fn.Parameters {
 		if paramIdx >= len(args) {
-			env.Set(param.Value, NULL)
+			env.Upsert(param.Value, NULL)
 		} else {
-			env.Set(param.Value, args[paramIdx])
+			env.Upsert(param.Value, args[paramIdx])
 		}
 	}
 

@@ -20,7 +20,15 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
+func (e *Environment) Upsert(name string, val Object) Object {
+	e.store[name] = val
+	return val
+}
+
 func (e *Environment) Set(name string, val Object) Object {
+	if _, ok := e.store[name]; ok {
+		return &Error{Message: fmt.Sprintf("Identifier '%s' has already been declared", name)}
+	}
 	e.store[name] = val
 	return val
 }

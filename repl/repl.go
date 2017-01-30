@@ -1,10 +1,9 @@
 package repl
 
 import (
-	"bufio"
-	"fmt"
 	"io"
 
+	"github.com/chzyer/readline"
 	"github.com/mrtraan/monkey/evaluator"
 	"github.com/mrtraan/monkey/lexer"
 	"github.com/mrtraan/monkey/object"
@@ -14,17 +13,26 @@ import (
 const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
-	scanner := bufio.NewScanner(in)
+	l, err := readline.New(PROMPT)
+	if err != nil {
+		panic(err)
+	}
+	defer l.Close()
+
 	env := object.NewEnvironment()
 
 	for {
-		fmt.Printf(PROMPT)
-		scanned := scanner.Scan()
-		if !scanned {
-			return
+		line, err := l.Readline()
+		if err == readline.ErrInterrupt {
+			if len(line) == 0 {
+				break
+			} else {
+				continue
+			}
+		} else if err == io.EOF {
+			break
 		}
 
-		line := scanner.Text()
 		l := lexer.New(line)
 		p := parser.New(l)
 
