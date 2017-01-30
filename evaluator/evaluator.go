@@ -281,18 +281,18 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 }
 
 func evalWhileExpression(ie *ast.WhileExpression, env *object.Environment) object.Object {
-	var lastLoop object.Object
+	var consequence object.Object = NULL
+	condition := Eval(ie.Condition, env)
 
-	lastLoop = NULL
-
-	for condition := Eval(ie.Condition, env); isTruthy(condition); condition = Eval(ie.Condition, env) {
-		if isError(condition) {
-			return condition
-		}
-		lastLoop = Eval(ie.Consequence, env)
+	for ; isTruthy(condition); condition = Eval(ie.Condition, env) {
+		consequence = Eval(ie.Consequence, env)
 	}
 
-	return lastLoop
+	if isError(condition) {
+		return condition
+	}
+
+	return consequence
 }
 
 func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Object {
@@ -309,6 +309,10 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 }
 
 func isTruthy(obj object.Object) bool {
+	if isError(obj) {
+		return false
+	}
+
 	switch obj {
 	case NULL:
 		return false
